@@ -298,7 +298,10 @@ def handle_user_prompt_submit():
         "tool_name": "skill_mcp",
         "tool_input": {
             "prompt_name": "analyze_clipboard_image",
-            "mcp_name": "minimax-clipboard"
+            "mcp_name": "minimax-clipboard",
+            "arguments": {
+                "prompt": user_prompt
+            }
         }
     }
 
