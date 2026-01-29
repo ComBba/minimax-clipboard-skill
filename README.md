@@ -30,11 +30,17 @@ Claude: This screenshot shows a web application dashboard with...
 
 ## 📦 Installation
 
+This skill provides **two hooks** for different workflows. You can install one or both.
+
 ### Quick Install (Recommended)
+
+Installs the clipboard hook (Python):
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/scripts/install.sh)
 ```
+
+For the OpenCode hook (JavaScript), see [Manual Installation](#manual-installation).
 
 ### Manual Installation
 
@@ -56,7 +62,9 @@ bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-ski
    chmod +x ~/.claude/hooks/minimax_clipboard_image/hook.py
    ```
 
-4. **Update Claude settings**:
+4. **Choose your hook(s)**:
+
+   **Option A: Clipboard Hook (Python)** - for screenshot workflow
    
    Add to `~/.claude/settings.json`:
    
@@ -108,6 +116,35 @@ bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-ski
    }
    ```
 
+   **Option B: OpenCode Hook (JavaScript)** - for look_at tool workflow
+   
+   Copy hook:
+   ```bash
+   mkdir -p ~/.config/opencode/hooks
+   cp hooks/opencode/minimax-image-handler.js ~/.config/opencode/hooks/
+   ```
+   
+   Add to `~/.claude/settings.json`:
+   ```json
+   {
+     "hooks": {
+       "PreToolUse": [
+         {
+           "matcher": "look_at",
+           "hooks": [
+             {
+               "type": "command",
+               "command": "node ~/.config/opencode/hooks/minimax-image-handler.js"
+             }
+           ]
+         }
+       ]
+     }
+   }
+   ```
+
+   **Both Options**: You can use both hooks simultaneously for maximum flexibility.
+
 5. **Restart Claude Code**
 
 6. **Verify installation**:
@@ -118,7 +155,11 @@ bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-ski
 
 ## 🚀 Usage
 
-### Basic Workflow
+### Two Workflows Available
+
+#### Workflow 1: Clipboard (Python Hook)
+
+Perfect for screenshots and quick image analysis.
 
 1. **Copy** any image to your clipboard:
    - Screenshot (Cmd+Shift+4 on macOS)
@@ -131,6 +172,14 @@ bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-ski
 3. **Ask** your question or press Enter
 
 4. Claude **automatically analyzes** the image
+
+#### Workflow 2: File Attachment (JavaScript Hook)
+
+Perfect for existing image files and look_at tool users.
+
+1. **Attach** image file to Claude Code or use look_at tool
+2. **Ask** your question
+3. Hook **intercepts** and calls MiniMax automatically
 
 ### Use Cases
 
