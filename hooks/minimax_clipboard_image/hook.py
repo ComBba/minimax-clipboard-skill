@@ -292,20 +292,19 @@ def handle_user_prompt_submit():
     if not user_prompt:
         user_prompt = "이 이미지를 분석해 주세요. 무엇이 보이는지 설명하고, 텍스트가 있다면 추출하고, 중요한 세부사항을 포함해 주세요."
 
-    # Inject context for MiniMax analysis
-    analysis_instruction = f"""
-[Auto-Injected Image Analysis Context]
-이미지 파일: {image_path}
-작업: MiniMax_understand_image 도구를 사용하여 이 이미지를 분석하세요.
+    # Output a direct tool call for OpenCode plugin to execute
+    # This format matches what skill_mcp expects
+    tool_call = {
+        "tool_name": "skill_mcp",
+        "tool_input": {
+            "prompt_name": "analyze_clipboard_image",
+            "mcp_name": "minimax-clipboard"
+        }
+    }
 
-사용자 요청: {user_prompt}
-
-분석 후 결과를 명확하게 표시하고, 발견한 모든 텍스트(OCR), 객체, 레이아웃을 포함하세요.
-"""
-
-    # Add to additional context
+    # Add to additional context as a tool call instruction
     existing_context = context.get("additionalContext", "")
-    context["additionalContext"] = existing_context + analysis_instruction
+    context["additionalContext"] = existing_context + json.dumps(tool_call) + "\n"
     context["minimax_image_path"] = image_path
     context["auto_analyze_image"] = True
 
@@ -314,7 +313,7 @@ def handle_user_prompt_submit():
     system_messages.append("🖼️ 클립보드 이미지 감지됨. MiniMax로 분석을 시작합니다...")
     context["systemMessages"] = system_messages
 
-    log(f"Injected image analysis context for: {image_path}")
+    log(f"Generated skill_mcp tool call for: {image_path}")
 
     # Output modified context
     print(json.dumps(context), flush=True)
