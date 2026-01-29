@@ -7,7 +7,7 @@ Thank you for considering contributing! This document outlines how to contribute
 1. **Fork** the repository
 2. **Clone** your fork:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/minimax-clipboard-skill.git
+   git clone https://github.com/ComBba/minimax-clipboard-skill.git
    cd minimax-clipboard-skill
    ```
 3. **Create** a feature branch:
@@ -87,7 +87,7 @@ echo '{"prompt": "test", "session": {"id": "test123"}}' | \
 
 ### Before Reporting
 
-1. Check [existing issues](https://github.com/YOUR_USERNAME/minimax-clipboard-skill/issues)
+1. Check [existing issues](https://github.com/ComBba/minimax-clipboard-skill/issues)
 2. Try with latest version
 3. Verify pngpaste is installed
 4. Test with test-workflow.sh
@@ -251,7 +251,7 @@ Contributors will be acknowledged in:
 
 ## 💬 Questions?
 
-- Open a [Discussion](https://github.com/YOUR_USERNAME/minimax-clipboard-skill/discussions)
+- Open a [Discussion](https://github.com/ComBba/minimax-clipboard-skill/discussions)
 - Join our community chat (if applicable)
 - Check existing documentation first
 

@@ -33,7 +33,7 @@ Claude: This screenshot shows a web application dashboard with...
 ### Quick Install (Recommended)
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/scripts/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/scripts/install.sh)
 ```
 
 ### Manual Installation
@@ -45,7 +45,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipbo
 
 2. **Clone the repository**:
    ```bash
-   git clone https://github.com/YOUR_USERNAME/minimax-clipboard-skill.git
+   git clone https://github.com/ComBba/minimax-clipboard-skill.git
    cd minimax-clipboard-skill
    ```
 
@@ -357,9 +357,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## 📞 Support
 
-- **Bug Reports**: [GitHub Issues](https://github.com/YOUR_USERNAME/minimax-clipboard-skill/issues)
-- **Questions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/minimax-clipboard-skill/discussions)
-- **Twitter**: [@your_handle](https://twitter.com/your_handle)
+- **Bug Reports**: [GitHub Issues](https://github.com/ComBba/minimax-clipboard-skill/issues)
+- **Questions**: [GitHub Discussions](https://github.com/ComBba/minimax-clipboard-skill/discussions)
 
 ## ⭐ Star History
 

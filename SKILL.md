@@ -25,7 +25,7 @@ No manual file saving required—just paste and ask!
 Run the installation script:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/scripts/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/scripts/install.sh)
 ```
 
 Or manually:
@@ -225,5 +225,5 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ## Support
 
-- **Issues**: [GitHub Issues](https://github.com/YOUR_USERNAME/minimax-clipboard-skill/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/YOUR_USERNAME/minimax-clipboard-skill/discussions)
+- **Issues**: [GitHub Issues](https://github.com/ComBba/minimax-clipboard-skill/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/ComBba/minimax-clipboard-skill/discussions)

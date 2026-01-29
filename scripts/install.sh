@@ -2,7 +2,7 @@
 #
 # MiniMax Clipboard Skill - Installation Script
 # 
-# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/scripts/install.sh)
+# Usage: bash <(curl -fsSL https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/scripts/install.sh)
 #
 
 set -e
@@ -103,14 +103,14 @@ install_hook() {
     
     # Download hook.py
     if command -v curl &> /dev/null; then
-        curl -fsSL "https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/hooks/minimax_clipboard_image/hook.py" \
+        curl -fsSL "https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/hooks/minimax_clipboard_image/hook.py" \
             -o "$SKILL_HOOK_DIR/hook.py"
-        curl -fsSL "https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/hooks/minimax_clipboard_image/test-workflow.sh" \
+        curl -fsSL "https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/hooks/minimax_clipboard_image/test-workflow.sh" \
             -o "$SKILL_HOOK_DIR/test-workflow.sh"
     elif command -v wget &> /dev/null; then
-        wget -q "https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/hooks/minimax_clipboard_image/hook.py" \
+        wget -q "https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/hooks/minimax_clipboard_image/hook.py" \
             -O "$SKILL_HOOK_DIR/hook.py"
-        wget -q "https://raw.githubusercontent.com/YOUR_USERNAME/minimax-clipboard-skill/main/hooks/minimax_clipboard_image/test-workflow.sh" \
+        wget -q "https://raw.githubusercontent.com/ComBba/minimax-clipboard-skill/master/hooks/minimax_clipboard_image/test-workflow.sh" \
             -O "$SKILL_HOOK_DIR/test-workflow.sh"
     else
         print_error "Neither curl nor wget found. Please install one of them."
@@ -301,7 +301,7 @@ print_completion() {
     echo "  $SKILL_HOOK_DIR/test-workflow.sh"
     echo ""
     echo -e "${BLUE}Documentation:${NC}"
-    echo "  https://github.com/YOUR_USERNAME/minimax-clipboard-skill"
+    echo "  https://github.com/ComBba/minimax-clipboard-skill"
     echo ""
 }
 
