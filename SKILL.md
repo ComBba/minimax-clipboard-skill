@@ -12,13 +12,22 @@ Seamlessly analyze clipboard images in Claude Code using MiniMax's `understand_i
 
 ## What This Skill Does
 
+This skill provides **two complementary hooks** for seamless image analysis:
+
+### Hook 1: Clipboard Image (Python)
 When you paste an image in Claude Code:
 1. **Detects** "Cannot read clipboard" error
 2. **Saves** image to temporary file automatically
 3. **Analyzes** image using MiniMax_understand_image
 4. **Cleans up** temporary files after analysis
 
-No manual file saving required—just paste and ask!
+### Hook 2: OpenCode Image Handler (JavaScript)
+When you use look_at tool or attach files:
+1. **Intercepts** look_at tool usage
+2. **Calls** MiniMax_understand_image directly
+3. **Returns** analysis results
+
+No manual file saving required—just paste or attach!
 
 ## Installation
 
