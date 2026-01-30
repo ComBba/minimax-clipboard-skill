@@ -230,12 +230,59 @@ def handle_notification():
     print(json.dumps(context), flush=True)
 
 
+def cleanup_old_files():
+    """Clean up files/directories older than 24 hours"""
+    try:
+        # 24 hours in seconds
+        max_age = 24 * 60 * 60
+        now = time.time()
+
+        # Check if directory exists
+        if not CLIPBOARD_DIR.exists():
+            return
+
+        count = 0
+        # Iterate over all items in clipboard directory
+        for item in CLIPBOARD_DIR.iterdir():
+            try:
+                # Check age
+                stat = item.stat()
+                age = now - stat.st_mtime
+
+                if age > max_age:
+                    if item.is_dir():
+                        shutil.rmtree(item)
+                        log(
+                            f"Cleaned up old session directory: {item.name} ({age / 3600:.1f}h old)"
+                        )
+                        count += 1
+                    elif item.is_file():
+                        # Don't delete lock file unless it's REALLY old (stale lock)
+                        if item.name == ".lock" and age < 300:  # 5 mins for lock
+                            continue
+                        item.unlink()
+                        log(f"Cleaned up old file: {item.name} ({age / 3600:.1f}h old)")
+                        count += 1
+            except Exception as e:
+                # Ignore errors for individual files
+                pass
+
+        if count > 0:
+            log(f"Cleanup finished. Removed {count} old items.")
+
+    except Exception as e:
+        log(f"Error during global cleanup: {e}")
+
+
 def handle_user_prompt_submit():
     """
     Handle UserPromptSubmit events.
     Check if there's a clipboard image to analyze and inject context.
     """
     log("Processing UserPromptSubmit event")
+
+    # Run global cleanup (opportunistic, doesn't block much)
+    cleanup_old_files()
 
     # Read context from stdin
     try:
@@ -248,38 +295,48 @@ def handle_user_prompt_submit():
     session_id = get_session_id(context)
     log(f"Session ID: {session_id}")
 
+    # Determine prompt - use user's prompt if provided
+    prompt = context.get("prompt", "") or context.get("message", "")
+    user_prompt = prompt.strip()
+
+    # Define keywords that trigger clipboard analysis
+    # STRICT MODE: Only trigger when Claude's image marker is present
+    # This prevents accidental triggers from words like "image" in text conversation
+    trigger_keywords = [
+        "[image",
+        "[Image",  # Claude's automatic marker when pasting images
+    ]
+
+    prompt_lower = user_prompt.lower()
+    is_triggered = any(k.lower() in prompt_lower for k in trigger_keywords)
+
+    if not is_triggered:
+        # If no trigger keyword is found, do not access clipboard or inject context
+        log("No [Image] marker found in prompt. Skipping analysis.")
+        print(json.dumps(context), flush=True)
+        return
+
     # Create session-specific last image reference
     session_last_image = CLIPBOARD_DIR / f".last_image_{session_id}"
-
-    prompt = context.get("prompt", "") or context.get("message", "")
-
-    # Check for image patterns in prompt (Claude Code shows "[Image 1]" when image is pasted)
-    has_image_reference = "[Image" in prompt or "clipboard" in prompt.lower()
 
     # Try to save clipboard image if not already saved
     image_path = None
 
-    if session_last_image.exists():
-        image_path = session_last_image.read_text().strip()
-        if image_path and Path(image_path).exists():
-            log(f"Found previously saved image for session {session_id}: {image_path}")
-        else:
-            image_path = None
-
-    # If no saved image, try to capture from clipboard now
-    if not image_path:
-        log("No saved image found, checking clipboard...")
-        image_path = save_clipboard_image(session_id)
+    # Force refresh from clipboard if [Image] marker is present
+    # This ensures we get the NEW image user just pasted, not the old cached one
+    log("Image marker detected, refreshing from clipboard...")
+    image_path = save_clipboard_image(session_id)
 
     if not image_path or not Path(image_path).exists():
         # No image to analyze - just pass through
-        if has_image_reference:
+        # Only warn if it looked like they REALLY tried to paste an image (Claude marker)
+        if "[Image" in prompt or "[image" in prompt:
             log("Image reference found in prompt but no clipboard image available")
             # User tried to paste an image but it's not available
             # Add a clear system message instead of auto-injecting
             system_messages = context.get("systemMessages", [])
             system_messages.append(
-                "⚠️ 이미지가 클립보드에서 감지되지 않았습니다. 이미지를 붙여넣은 후 다시 시도하거나, 파일 경로를 직접 입력해 주세요."
+                "⚠️ 이미지가 클립보드에서 감지되지 않았습니다. 이미지가 클립보드에 있는지 확인해주세요."
             )
             context["systemMessages"] = system_messages
         print(json.dumps(context), flush=True)
@@ -287,8 +344,6 @@ def handle_user_prompt_submit():
 
     log(f"Found image to analyze: {image_path}")
 
-    # Determine prompt - use user's prompt if provided
-    user_prompt = prompt.strip()
     if not user_prompt:
         user_prompt = "이 이미지를 분석해 주세요. 무엇이 보이는지 설명하고, 텍스트가 있다면 추출하고, 중요한 세부사항을 포함해 주세요."
 
